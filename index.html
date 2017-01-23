@@ -1,0 +1,79 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link type="text/css" rel="stylesheet" href="style.css">
+<script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<style>
+*{padding:0;margin:0;}
+body{
+ width:400px;
+ margin:1em auto;
+ font-family:'microsoft yahei';
+}
+.search-wrap{
+	padding-bottom:1em;
+}
+.search-wrap input{
+	width:100%;
+	line-height:2em;
+	padding:0 1em;
+	outline:none;
+	border:1px #ccc solid;
+}
+.charactors-container{overflow:hidden;
+width:auto;
+max-width:26em;
+border-left:1px #aaa solid;
+border-top:1px #aaa solid;
+}
+.charactors-container li{list-style: none;float:left;display:block; width:3em;height:3em; line-height:3em;
+border-right:1px #aaa solid;border-bottom:1px #aaa solid; text-align:center;}
+.pinyin{	
+	background:yellow;
+}
+</style>
+<body>
+<div class="search-wrap">
+<input type="text" id="myinput">
+</div>
+<div class="charactors-container">
+<ul class="charator-wrap" id="charactoWrap">
+</ul>
+</div>
+</body>
+<script src="js/pinyin.js"></script>
+<script>
+var myinput = document.getElementById('myinput');
+var charactoWrap = document.getElementById('charactoWrap');
+function bindHtml(charactors){
+	$(charactoWrap).html('');
+	for(var i in charactors){
+		$(charactoWrap).append('<li class="pinyin">'+i+'</li>');
+		var _str = charactors[i];
+		for(var j=0;j<_str.length;j++){
+			$(charactoWrap).append('<li>'+_str[j]+'</li>');
+		}
+	}
+};
+$(myinput).on('keyup',function(event){
+	var _mysearch = $(this).val();
+	if(_mysearch===''){
+		$(charactoWrap).html('');
+		return;
+	}
+	var reg = new RegExp('[a-zA-Z]{0,10}');
+	if(reg.test(_mysearch)){
+		bindHtml(searchCharactorByPinyin(_mysearch,true));
+	}else{
+		return false;
+	}
+})
+//初次调用查询需带true关键字，ture关键字查询时会重置查询范围为全量。
+//不带ture时，查询范围为上一次查询的结果。
+//
+//console.log(searchCharactorByPinyin('ba',true));
+//console.log(searchCharactorByPinyin('ca'));
+//console.log(searchCharactorByPinyin('ca',true));
+</script>
+</html>
